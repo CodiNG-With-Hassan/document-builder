@@ -1,0 +1,27 @@
+# Dev image for the API (apps/api). Build context: the repo root.
+FROM node:26-alpine
+
+# Match the packageManager pin in the root package.json.
+RUN npm install -g pnpm@10.33.0
+# No git checkout inside the image: the root `prepare` (hassan-devkit hooks:install) skips.
+ENV HUSKY=0
+
+WORKDIR /workspace
+
+# Every importer's package.json must be present so --frozen-lockfile can validate the
+# single workspace lockfile, even for a filtered install.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/api/package.json apps/api/
+COPY apps/web/package.json apps/web/
+RUN pnpm install --frozen-lockfile --filter api
+
+# No app source in the image: compose bind-mounts apps/api over /workspace/apps/api and
+# keeps node_modules in a named volume seeded from the install layer above, so every
+# checkout on the same lockfile shares one image.
+
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nestjs -u 1001 && \
+    chown -R nestjs:nodejs /workspace
+USER nestjs
+
+EXPOSE 3000

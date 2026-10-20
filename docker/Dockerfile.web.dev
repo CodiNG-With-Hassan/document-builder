@@ -1,0 +1,16 @@
+# Dev image for the Angular app (apps/web). Build context: the repo root.
+FROM node:26-alpine
+
+RUN npm install -g pnpm@10.33.0
+ENV HUSKY=0
+
+WORKDIR /workspace
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/api/package.json apps/api/
+COPY apps/web/package.json apps/web/
+RUN pnpm install --frozen-lockfile --filter web
+
+# Source is bind-mounted by compose; node_modules live in a named volume seeded from here.
+
+EXPOSE 4200

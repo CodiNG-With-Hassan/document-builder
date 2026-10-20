@@ -1,0 +1,10 @@
+{
+  "name": "theme",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Document Creator brand tokens: the PrimeNG preset consumed by the web app as source via the @Theme tsconfig path alias. Never built.",
+  "sideEffects": false,
+  "dependencies": {
+    "@primeuix/themes": "^3.0.1"
+  }
+}

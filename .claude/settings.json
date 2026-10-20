@@ -1,0 +1,27 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"${CLAUDE_PROJECT_DIR:-.}\" && node node_modules/@coding-with-hassan/devkit/bin/cli.js claude:hook pre-bash"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"${CLAUDE_PROJECT_DIR:-.}\" && node node_modules/@coding-with-hassan/devkit/bin/cli.js claude:hook post-edit",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

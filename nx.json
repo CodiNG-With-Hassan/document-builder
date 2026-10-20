@@ -1,0 +1,34 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "defaultBase": "main",
+  "namedInputs": {
+    "sharedGlobals": [
+      "{workspaceRoot}/pnpm-lock.yaml",
+      "{workspaceRoot}/pnpm-workspace.yaml",
+      { "runtime": "node --version" }
+    ],
+    "default": [
+      "{projectRoot}/**/*",
+      "!{projectRoot}/.angular/**",
+      "!{projectRoot}/coverage/**",
+      "!{projectRoot}/dist/**",
+      "sharedGlobals"
+    ],
+    "production": [
+      "default",
+      "!{projectRoot}/**/*.spec.ts",
+      "!{projectRoot}/test/**/*",
+      "!{projectRoot}/eslint.config.*"
+    ]
+  },
+  "targetDefaults": {
+    "build": {
+      "cache": true,
+      "inputs": ["production", "^production"],
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "lint": { "cache": true },
+    "test": { "cache": true, "outputs": ["{projectRoot}/coverage"] },
+    "format:check": { "cache": true }
+  }
+}

@@ -1,0 +1,23 @@
+packages:
+  - apps/*
+  - libs/*
+
+# Skip pnpm 11's pre-`run` deps check, which otherwise tries an interactive node_modules
+# purge that aborts headlessly (ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY).
+verifyDepsBeforeRun: false
+
+# pnpm 11+ build-script allowlist. true = run install scripts, false = skip.
+allowBuilds:
+  # api (NestJS)
+  bcrypt: true
+  '@nestjs/core': true
+  unrs-resolver: true
+  sharp: true
+  '@scarf/scarf': false
+  # web (Angular build toolchain, pulled in transitively)
+  '@parcel/watcher': true
+  esbuild: true
+  lmdb: true
+  msgpackr-extract: true
+  # Nx task runner (native binary postinstall)
+  nx: true

@@ -1,0 +1,7 @@
+FROM postgres:17-alpine
+
+ARG TARGETARCH
+RUN apk add --no-cache wget ca-certificates \
+    && wget -q "https://dl.min.io/client/mc/release/linux-${TARGETARCH}/mc" -O /usr/local/bin/mc \
+    && chmod +x /usr/local/bin/mc \
+    && apk del wget

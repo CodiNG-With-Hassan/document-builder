@@ -1,0 +1,196 @@
+# Paths in this file are relative to docker/ (compose semantics): build contexts are `..`.
+# One stack per checkout: COMPOSE_PROJECT_NAME and the DEVKIT_PORT_* host ports come from
+# the managed block in .env that `hassan-devkit worktree:env` writes (slot 0 = the main
+# checkout, unoffset ports). See docs/WORKTREES.md.
+#
+# Profiles (COMPOSE_PROFILES in .env, managed by `pnpm worktree:profiles add|remove`):
+#   api    — db, init, api, minio, mailpit (mandatory; the default)
+#   web    — the Angular dev server (SSR)
+#   extras — n8n + pgadmin (off by default)
+#
+# Dev images are shared across worktrees: document-creator-dev-<svc>:${DEVKIT_IMAGE_TAG}, where the
+# tag hashes the lockfile + every package.json + these Dockerfiles. Source is bind-mounted,
+# so checkouts on the same dependencies reuse one image and only a dependency bump builds.
+#
+# Dev servers restart on-failure:3 (a crash-looping watcher must not burn CPU forever);
+# infra is unless-stopped.
+name: ${COMPOSE_PROJECT_NAME:-document-creator}
+
+# Fails every compose command with an actionable error while COMPOSE_PROFILES is unset or
+# empty. An extension field, not a service label: changing the profile set never alters a
+# container's config.
+x-devkit-profiles-guard: ${COMPOSE_PROFILES:?COMPOSE_PROFILES missing or empty in .env - run pnpm worktree:env (writes the default COMPOSE_PROFILES=api)}
+
+services:
+  db:
+    image: postgres:17-alpine
+    profiles: ['api']
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - '${DEVKIT_PORT_DB:-5432}:5432'
+
+  init:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.init
+    image: document-creator-dev-init:${DEVKIT_IMAGE_TAG:-latest}
+    profiles: ['api']
+    depends_on:
+      - db
+      - minio
+    restart: on-failure
+    environment:
+      PGHOST: db
+      PGUSER: ${DB_USERNAME}
+      PGPASSWORD: ${DB_PASSWORD}
+      MINIO_HOST: minio
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      INIT_BUCKETS: ${INIT_BUCKETS:-uploads avatars}
+    volumes:
+      - ./scripts/dev-init.sh:/init.sh:ro
+    entrypoint: ['/bin/sh', '/init.sh']
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    image: document-creator-dev-api:${DEVKIT_IMAGE_TAG:-latest}
+    profiles: ['api']
+    restart: on-failure:3
+    working_dir: /workspace/apps/api
+    command: ['pnpm', 'run', 'start:dev']
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION=${JWT_EXPIRATION}
+      - CORS_ORIGIN=${CORS_ORIGIN}
+      - MAIL_HOST=mailpit
+      - MAIL_PORT=1025
+      - MAIL_FROM=${MAIL_FROM:-noreply@example.com}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:4200}
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_PORT=${MINIO_PORT}
+      - MINIO_USE_SSL=${MINIO_USE_SSL}
+      - MINIO_ACCESS_KEY=${MINIO_ROOT_USER}
+      - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD}
+    ports:
+      - '${DEVKIT_PORT_API:-3000}:3000'
+    depends_on:
+      - db
+    volumes:
+      # Source is bind-mounted; node_modules stay in a named volume seeded from the image.
+      - ../apps/api:/workspace/apps/api
+      - api_node_modules:/workspace/apps/api/node_modules
+
+  web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.web.dev
+    image: document-creator-dev-web:${DEVKIT_IMAGE_TAG:-latest}
+    profiles: ['web']
+    restart: on-failure:3
+    working_dir: /workspace/apps/web
+    command: ['pnpm', 'exec', 'ng', 'serve', '--host', '0.0.0.0', '--port', '4200']
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=1000
+      - ANGULAR_SSR_ALLOWED_HOSTS=.localhost
+      # The dev server proxies /api to the API over the compose network (proxy.conf.mjs).
+      - API_PROXY_TARGET=http://api:3000
+    ports:
+      - '${DEVKIT_PORT_WEB:-4200}:4200'
+    volumes:
+      - ../apps/web:/workspace/apps/web
+      - web_node_modules:/workspace/apps/web/node_modules
+
+  minio:
+    image: minio/minio:latest
+    profiles: ['api']
+    restart: unless-stopped
+    ports:
+      - '${DEVKIT_PORT_MINIO:-9000}:9000'
+      - '${DEVKIT_PORT_MINIO_CONSOLE:-9001}:9001'
+    command: ['server', '--console-address', ':9001', '/data']
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+
+  mailpit:
+    image: axllent/mailpit:latest
+    profiles: ['api']
+    restart: unless-stopped
+    ports:
+      - '${DEVKIT_PORT_SMTP:-1025}:1025'
+      - '${DEVKIT_PORT_MAILPIT:-8025}:8025'
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    profiles: ['extras']
+    restart: unless-stopped
+    ports:
+      - '${DEVKIT_PORT_N8N:-5678}:5678'
+    depends_on:
+      - init
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_RUNNERS_ENABLED=true
+      - WEBHOOK_URL=http://localhost:${DEVKIT_PORT_N8N:-5678}/
+      - GENERIC_TIMEZONE=Europe/Amsterdam
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - TZ=Europe/Amsterdam
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=db
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_USER=${DB_USERNAME}
+      - DB_POSTGRESDB_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    profiles: ['extras']
+    restart: unless-stopped
+    user: root
+    entrypoint: /bin/sh -c "chmod 600 /pgpass && /entrypoint.sh"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=postgres
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
+      - ./pgadmin/pgpass:/pgpass
+    ports:
+      - '${DEVKIT_PORT_PGADMIN:-5050}:80'
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
+  minio_data:
+  n8n_data:
+  # node_modules keyed by project + image tag: a dependency bump changes the tag, the next
+  # `up` mounts fresh volumes seeded from the new image; worktree:env drops stale-tag volumes.
+  api_node_modules:
+    name: ${COMPOSE_PROJECT_NAME:-document-creator}_api_node_modules_${DEVKIT_IMAGE_TAG:-latest}
+  web_node_modules:
+    name: ${COMPOSE_PROJECT_NAME:-document-creator}_web_node_modules_${DEVKIT_IMAGE_TAG:-latest}

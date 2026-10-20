@@ -1,0 +1,24 @@
+{
+  "folders": [
+    { "name": "workspace", "path": "." },
+    { "name": "api (nest)", "path": "apps/api" },
+    { "name": "web (angular)", "path": "apps/web" }
+  ],
+  "settings": {
+    "eslint.useFlatConfig": true,
+    "eslint.workingDirectories": [
+      { "directory": "apps/api", "changeProcessCWD": true },
+      { "directory": "apps/web", "changeProcessCWD": true }
+    ],
+    "prettier.requireConfig": true,
+    "typescript.tsdk": "apps/web/node_modules/typescript/lib"
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "angular.ng-template",
+      "nrwl.angular-console"
+    ]
+  }
+}

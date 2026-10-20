@@ -1,0 +1,89 @@
+{
+  "name": "document-creator",
+  "private": true,
+  "packageManager": "pnpm@11.18.0",
+  "scripts": {
+    "docker:dev:up": "hassan-devkit docker:up",
+    "docker:dev:down": "hassan-devkit docker:down",
+    "docker:dev:logs": "hassan-devkit docker:logs",
+    "docker:dev:restart-api": "hassan-devkit docker:restart api",
+    "docker:dev:restart-web": "hassan-devkit docker:restart web",
+    "worktree:create": "hassan-devkit worktree:create",
+    "worktree:env": "hassan-devkit worktree:env",
+    "worktree:profiles": "hassan-devkit worktree:profiles",
+    "worktree:remove": "hassan-devkit worktree:remove",
+    "worktree:prune": "hassan-devkit worktree:prune",
+    "worktree:list": "hassan-devkit worktree:list",
+    "db:list-tables": "hassan-devkit db:list-tables",
+    "db:psql": "hassan-devkit db:psql",
+    "build": "nx run-many -t build",
+    "lint": "nx run-many -t lint",
+    "format": "nx run-many -t format",
+    "format:check": "nx run-many -t format:check",
+    "affected": "hassan-devkit ci:affected",
+    "ci:check": "hassan-devkit ci:check",
+    "prepare": "hassan-devkit hooks:install && hassan-devkit claude:install"
+  },
+  "hassan-devkit": {
+    "worktree": {
+      "ports": {
+        "api": 3000,
+        "web": 4200,
+        "db": 5432,
+        "minio": 9000,
+        "minioConsole": 9001,
+        "n8n": 5678,
+        "smtp": 1025,
+        "mailpit": 8025,
+        "pgadmin": 5050
+      },
+      "profiles": {
+        "default": [
+          "api"
+        ],
+        "required": [
+          "api"
+        ]
+      },
+      "seeds": {
+        "scripts": []
+      },
+      "ready": {
+        "url": "http://localhost:${DEVKIT_PORT_API}/api/docs-json",
+        "timeoutSeconds": 600
+      },
+      "env": {
+        "FRONTEND_URL": "http://localhost:${DEVKIT_PORT_WEB}",
+        "API_PROXY_TARGET": "http://localhost:${DEVKIT_PORT_API}"
+      }
+    },
+    "tracker": {
+      "kind": "none"
+    },
+    "commits": {},
+    "ci": {
+      "nodeVersion": "26",
+      "baseBranch": "main",
+      "checks": []
+    },
+    "db": {
+      "service": "db",
+      "user": "postgres",
+      "name": "document_creator"
+    },
+    "i18n": {
+      "dir": "apps/web/public/assets/i18n",
+      "languages": [
+        "en"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@coding-with-hassan/devkit": "^1.4.0",
+    "@coding-with-hassan/renovate-config": "^0.2.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.4",
+    "mattpocock-skills": "github:mattpocock/skills#v1.2.3",
+    "nx": "^23.1.1"
+  }
+}
