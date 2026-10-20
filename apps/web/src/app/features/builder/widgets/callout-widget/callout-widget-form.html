@@ -1,0 +1,55 @@
+<div>
+  <span class="mb-1 block text-sm font-medium">{{
+    'BUILDER.WIDGETS.CALLOUT.STYLE' | translate
+  }}</span>
+  <p-button-group role="group" [attr.aria-label]="'BUILDER.WIDGETS.CALLOUT.STYLE' | translate">
+    @for (option of styles; track option.style) {
+      <p-button
+        size="small"
+        [icon]="option.icon"
+        [label]="option.labelKey | translate"
+        [severity]="widget().value.config.style === option.style ? 'primary' : 'secondary'"
+        [outlined]="widget().value.config.style !== option.style"
+        [attr.aria-pressed]="widget().value.config.style === option.style"
+        (onClick)="setStyle(option.style)"
+      />
+    }
+  </p-button-group>
+</div>
+
+<div>
+  <label for="callout-widget-title" class="mb-1 block text-sm font-medium">
+    {{ 'BUILDER.WIDGETS.CALLOUT.TITLE' | translate }}
+  </label>
+  <input
+    pInputText
+    id="callout-widget-title"
+    class="w-full"
+    autocomplete="off"
+    [formField]="calloutForm.title"
+    (input)="onFieldInput('title', $event)"
+    (blur)="commit.emit()"
+  />
+</div>
+
+<app-rich-text-editor
+  [label]="'BUILDER.WIDGETS.CALLOUT.BODY' | translate"
+  [html]="widget().value.content.html"
+  (htmlChange)="onHtmlChange($event)"
+  (commit)="commit.emit()"
+/>
+
+<div>
+  <label for="callout-widget-source" class="mb-1 block text-sm font-medium">
+    {{ 'BUILDER.WIDGETS.CALLOUT.SOURCE' | translate }}
+  </label>
+  <input
+    pInputText
+    id="callout-widget-source"
+    class="w-full"
+    autocomplete="off"
+    [formField]="calloutForm.source"
+    (input)="onFieldInput('source', $event)"
+    (blur)="commit.emit()"
+  />
+</div>

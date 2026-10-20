@@ -1,0 +1,29 @@
+.video {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+
+.video__frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 0.5rem;
+}
+
+/* In Edit mode a click selects the Widget instead of playing the video. */
+.video__frame--edit {
+  pointer-events: none;
+}
+
+.video__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  height: 100%;
+  border: 2px dashed var(--p-surface-300);
+  border-radius: 0.5rem;
+  color: var(--p-surface-400);
+  font-size: 0.875rem;
+}

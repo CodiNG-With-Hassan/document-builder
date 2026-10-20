@@ -1,0 +1,22 @@
+<label for="video-widget-url" class="block text-sm font-medium">
+  {{ 'BUILDER.WIDGETS.VIDEO.FIELD_URL' | translate }}
+</label>
+<input
+  pInputText
+  id="video-widget-url"
+  type="url"
+  class="w-full"
+  autocomplete="off"
+  placeholder="https://www.youtube.com/watch?v=…"
+  [formField]="videoForm.url"
+  (input)="onUrlInput($event)"
+  (blur)="commit.emit()"
+/>
+<p
+  class="text-xs"
+  [class]="unsupported() ? 'text-[var(--p-red-500)]' : 'text-[var(--p-surface-500)]'"
+>
+  {{
+    (unsupported() ? 'BUILDER.WIDGETS.VIDEO.UNSUPPORTED' : 'BUILDER.WIDGETS.VIDEO.HINT') | translate
+  }}
+</p>

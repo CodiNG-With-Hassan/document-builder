@@ -1,0 +1,54 @@
+<div>
+  <label for="header-widget-text" class="mb-1 block text-sm font-medium">
+    {{ 'BUILDER.WIDGETS.HEADER.FIELD_LABEL' | translate }}
+  </label>
+  <input
+    pInputText
+    id="header-widget-text"
+    class="w-full"
+    autocomplete="off"
+    [formField]="headerForm.text"
+    [placeholder]="'BUILDER.WIDGETS.HEADER.PLACEHOLDER' | translate"
+    (input)="onTextInput($event)"
+    (blur)="commit.emit()"
+  />
+</div>
+
+<div>
+  <span class="mb-1 block text-sm font-medium">
+    {{ 'BUILDER.WIDGETS.HEADER.LEVEL' | translate }}
+  </span>
+  <p-button-group role="group" [attr.aria-label]="'BUILDER.WIDGETS.HEADER.LEVEL' | translate">
+    @for (level of levels; track level) {
+      <p-button
+        size="small"
+        [label]="'H' + level"
+        [severity]="widget().value.config.level === level ? 'primary' : 'secondary'"
+        [outlined]="widget().value.config.level !== level"
+        [attr.aria-pressed]="widget().value.config.level === level"
+        (onClick)="setLevel(level)"
+      />
+    }
+  </p-button-group>
+</div>
+
+<div class="flex items-center justify-between gap-2">
+  <label for="header-widget-numbered" class="text-sm font-medium">
+    {{ 'BUILDER.WIDGETS.HEADER.NUMBERED' | translate }}
+  </label>
+  <p-toggleswitch
+    inputId="header-widget-numbered"
+    [formField]="headerForm.numbered"
+    (onChange)="onNumberedChange()"
+  />
+</div>
+
+@if (outline()?.skippedLevel) {
+  <p class="flex gap-2 text-sm text-[var(--p-orange-600)]" role="status">
+    <i class="pi pi-exclamation-triangle mt-0.5" aria-hidden="true"></i>
+    {{
+      'BUILDER.WIDGETS.HEADER.SKIPPED_LEVEL'
+        | translate: { level: widget().value.config.level, parent: widget().value.config.level - 1 }
+    }}
+  </p>
+}

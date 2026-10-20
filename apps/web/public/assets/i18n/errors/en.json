@@ -1,0 +1,8 @@
+{
+  "ERRORS": {
+    "DOCUMENT_NOT_FOUND": "This document does not exist (anymore).",
+    "DOCUMENT_TITLE_REQUIRED": "A title is required.",
+    "DOCUMENT_TITLE_TAKEN": "Another document already has this title.",
+    "SAVE_FAILED": "Your change could not be saved."
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "BUILDER": {
+    "TOOLBAR": {
+      "LABEL": "Document toolbar",
+      "BACK": "Back to documents",
+      "DOCUMENT_ACTIONS": "Document actions",
+      "UNDO": "Undo",
+      "REDO": "Redo",
+      "MODE": "Mode",
+      "EDIT": "Edit",
+      "PREVIEW": "Preview"
+    },
+    "SECTION": {
+      "ADD": "Add section",
+      "UNTITLED": "Untitled section",
+      "TITLE_LABEL": "Section title",
+      "RENAME": "Rename section",
+      "EXPAND": "Expand section",
+      "COLLAPSE": "Collapse section",
+      "MOVE_UP": "Move section up",
+      "MOVE_DOWN": "Move section down",
+      "DELETE": "Delete section",
+      "DELETE_HEADER": "Delete section",
+      "DELETE_MESSAGE": "Delete this section and all its widgets?",
+      "EMPTY_HINT": "Drag a widget here",
+      "DRAG": "Drag to reorder section",
+      "NUMBERED": "Numbered"
+    },
+    "WIDGET": {
+      "DUPLICATE": "Duplicate widget",
+      "DELETE": "Delete widget",
+      "DELETE_HEADER": "Delete widget",
+      "DELETE_MESSAGE": "Are you sure that you want to delete this widget?",
+      "DRAG": "Drag to move widget"
+    },
+    "WIDGETS": {
+      "HEADER": {
+        "LABEL": "Header",
+        "PLACEHOLDER": "Empty header",
+        "FIELD_LABEL": "Header text",
+        "LEVEL": "Level",
+        "NUMBERED": "Numbered",
+        "SKIPPED_LEVEL": "Level skipped: this H{{level}} has no H{{parent}} before it in this section."
+      },
+      "TEXT": {
+        "LABEL": "Text",
+        "PLACEHOLDER": "Empty text",
+        "FIELD_LABEL": "Text"
+      },
+      "TOC": {
+        "LABEL": "Table of contents",
+        "TITLE": "Title",
+        "DEPTH": "Depth",
+        "DEPTH_SECTIONS": "Sections only",
+        "DEPTH_H1": "Up to H1",
+        "DEPTH_H2": "Up to H2",
+        "DEPTH_ALL": "All levels",
+        "EMPTY": "Add sections and headers to fill the table of contents."
+      },
+      "TABLE": {
+        "LABEL": "Table",
+        "HINT": "Click a cell in the selected table to edit it. Use the ⋯ handles for rows and columns.",
+        "CAPTION": "Caption",
+        "HEADER_ROW": "Header row",
+        "HEADER_COLUMN": "Header column",
+        "STRIPED": "Striped rows",
+        "RESET_WIDTHS": "Reset column widths",
+        "ADD_ROW": "Row",
+        "ADD_COLUMN": "Column",
+        "ROW_ACTIONS": "Actions for row {{row}}",
+        "COLUMN_ACTIONS": "Actions for column {{column}}",
+        "INSERT_ABOVE": "Insert row above",
+        "INSERT_BELOW": "Insert row below",
+        "INSERT_LEFT": "Insert column left",
+        "INSERT_RIGHT": "Insert column right",
+        "MOVE_UP": "Move row up",
+        "MOVE_DOWN": "Move row down",
+        "MOVE_LEFT": "Move column left",
+        "MOVE_RIGHT": "Move column right",
+        "DELETE_ROW": "Delete row",
+        "DELETE_COLUMN": "Delete column",
+        "CELL": "Row {{row}}, column {{column}}",
+        "LINK_LABEL": "Link text",
+        "LINK_URL": "URL",
+        "MAKE_LINK": "Make this cell a link",
+        "MAKE_TEXT": "Make this cell text",
+        "RESIZE": "Resize column"
+      },
+      "IMAGE": {
+        "LABEL": "Image",
+        "PLACEHOLDER": "No image yet",
+        "SOURCE": "Image",
+        "UPLOAD": "Upload an image (max 2 MB)",
+        "OR_URL": "or paste an image URL",
+        "UPLOADED": "Uploaded image",
+        "REMOVE": "Remove",
+        "NOT_AN_IMAGE": "That file is not an image.",
+        "TOO_LARGE": "Images can be at most 2 MB.",
+        "CAPTION": "Caption",
+        "OPENS": "Opens URL when clicked",
+        "FIT": "Fit",
+        "FIT_CONTAIN": "Contain",
+        "FIT_COVER": "Cover"
+      },
+      "CALLOUT": {
+        "LABEL": "Callout",
+        "PLACEHOLDER": "Empty callout",
+        "STYLE": "Style",
+        "STYLE_NOTE": "Note",
+        "STYLE_QUOTE": "Quote",
+        "STYLE_ANECDOTE": "Anecdote",
+        "TITLE": "Title",
+        "BODY": "Text",
+        "SOURCE": "Source"
+      },
+      "PROCESS": {
+        "LABEL": "Process",
+        "STEP": "Step {{number}}",
+        "STEP_PLACEHOLDER": "Step {{number}}",
+        "TITLE": "Step title",
+        "DESCRIPTION": "Description",
+        "ADD": "Add step",
+        "DRAG": "Drag to reorder step",
+        "MOVE_UP": "Move step up",
+        "MOVE_DOWN": "Move step down",
+        "DELETE": "Delete step"
+      },
+      "LINK": {
+        "LABEL": "Link",
+        "PLACEHOLDER": "Empty link",
+        "NO_URL": "This link has no URL yet",
+        "FIELD_LABEL": "Link text",
+        "FIELD_URL": "URL",
+        "FIELD_DESCRIPTION": "Description"
+      },
+      "VIDEO": {
+        "LABEL": "Video",
+        "PLACEHOLDER": "No video yet",
+        "UNSUPPORTED": "Only YouTube and Vimeo URLs are supported.",
+        "HINT": "Paste a YouTube or Vimeo link.",
+        "FIELD_URL": "Video URL"
+      }
+    },
+    "PALETTE": {
+      "TITLE": "Widgets",
+      "HINT": "Drag a widget into a section, or click it to add it to the active section.",
+      "LIMIT_REACHED": "This document already has one"
+    },
+    "SIDEBAR": {
+      "LABEL": "Widget sidebar",
+      "BACK_TO_PALETTE": "Back to widgets"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+<div
+  class="flex h-14 items-center gap-2 border-b border-[var(--p-surface-200)] bg-[var(--p-surface-0)] px-3"
+  role="toolbar"
+  [attr.aria-label]="'BUILDER.TOOLBAR.LABEL' | translate"
+>
+  <p-button
+    icon="pi pi-arrow-left"
+    severity="secondary"
+    [text]="true"
+    [rounded]="true"
+    routerLink="/documents"
+    [ariaLabel]="'BUILDER.TOOLBAR.BACK' | translate"
+    [pTooltip]="'BUILDER.TOOLBAR.BACK' | translate"
+    tooltipPosition="bottom"
+  />
+  <h1 class="min-w-0 truncate text-lg font-semibold">{{ store.document()?.title }}</h1>
+  <p-button
+    icon="pi pi-ellipsis-v"
+    severity="secondary"
+    size="small"
+    [text]="true"
+    [rounded]="true"
+    [ariaLabel]="'BUILDER.TOOLBAR.DOCUMENT_ACTIONS' | translate"
+    (click)="openMenu($event, documentMenu)"
+  />
+
+  <div class="ml-auto flex items-center gap-1">
+    <p-button
+      icon="pi pi-undo"
+      severity="secondary"
+      [text]="true"
+      [rounded]="true"
+      [disabled]="!store.canUndo()"
+      [ariaLabel]="'BUILDER.TOOLBAR.UNDO' | translate"
+      [pTooltip]="'BUILDER.TOOLBAR.UNDO' | translate"
+      tooltipPosition="bottom"
+      (onClick)="store.undo()"
+    />
+    <p-button
+      icon="pi pi-undo -scale-x-100"
+      severity="secondary"
+      [text]="true"
+      [rounded]="true"
+      [disabled]="!store.canRedo()"
+      [ariaLabel]="'BUILDER.TOOLBAR.REDO' | translate"
+      [pTooltip]="'BUILDER.TOOLBAR.REDO' | translate"
+      tooltipPosition="bottom"
+      (onClick)="store.redo()"
+    />
+
+    <p-button-group
+      class="ml-2"
+      role="group"
+      [attr.aria-label]="'BUILDER.TOOLBAR.MODE' | translate"
+    >
+      @for (option of modes; track option.mode) {
+        <p-button
+          [icon]="option.icon"
+          [label]="option.labelKey | translate"
+          size="small"
+          [severity]="store.mode() === option.mode ? 'primary' : 'secondary'"
+          [outlined]="store.mode() !== option.mode"
+          [attr.aria-pressed]="store.mode() === option.mode"
+          (onClick)="store.setMode(option.mode)"
+        />
+      }
+    </p-button-group>
+  </div>
+</div>
+
+<p-menu #documentMenu [model]="menuItems()" [popup]="true" appendTo="body" />
+
+<app-document-title-dialog
+  [(visible)]="renameVisible"
+  mode="rename"
+  [initialTitle]="store.document()?.title ?? ''"
+  [submitTitle]="renameDocument"
+/>

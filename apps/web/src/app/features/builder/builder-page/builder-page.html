@@ -1,0 +1,54 @@
+@if (store.document(); as document) {
+  <app-builder-toolbar />
+
+  <div class="flex min-h-0 flex-1">
+    <div class="min-w-0 flex-1 overflow-auto">
+      <div class="mx-auto flex max-w-6xl flex-col gap-4 p-6">
+        <div
+          class="flex flex-col gap-4"
+          cdkDropList
+          cdkDropListLockAxis="y"
+          [cdkDropListDisabled]="!store.editMode()"
+          (cdkDropListDropped)="onSectionDropped($event)"
+        >
+          @for (section of document.sections; track section.id; let index = $index) {
+            <app-section cdkDrag [cdkDragData]="section.id" [section]="section" [index]="index">
+              <!-- Compact stand-ins, so the Section's grid is never cloned or squeezed mid-drag. -->
+              <div
+                *cdkDragPreview
+                class="flex w-80 items-center gap-2 rounded-xl border border-[var(--p-primary-color)] bg-[var(--p-surface-0)] px-3 py-2 font-semibold shadow-lg"
+              >
+                <i class="pi pi-grip-vertical text-[var(--p-surface-400)]" aria-hidden="true"></i>
+                <span class="truncate">{{
+                  section.title || ('BUILDER.SECTION.UNTITLED' | translate)
+                }}</span>
+              </div>
+              <div
+                *cdkDragPlaceholder
+                class="h-16 rounded-xl border-2 border-dashed border-[var(--p-primary-color)] bg-[var(--p-primary-50)]"
+              ></div>
+            </app-section>
+          }
+        </div>
+
+        @if (store.editMode()) {
+          <p-button
+            class="self-start"
+            icon="pi pi-plus"
+            severity="secondary"
+            [outlined]="true"
+            [label]="'BUILDER.SECTION.ADD' | translate"
+            (onClick)="store.addSection()"
+          />
+        }
+      </div>
+    </div>
+
+    <div
+      class="w-80 shrink-0 overflow-auto border-l border-[var(--p-surface-200)] bg-[var(--p-surface-0)]"
+      [class.hidden]="!store.editMode()"
+    >
+      <app-widget-sidebar />
+    </div>
+  </div>
+}

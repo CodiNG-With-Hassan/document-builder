@@ -1,0 +1,51 @@
+.process {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.process__step {
+  position: relative;
+  display: flex;
+  gap: 0.875rem;
+  padding-bottom: 1rem;
+}
+
+.process__step:last-child {
+  padding-bottom: 0;
+}
+
+/* The line joining one step's circle to the next. */
+.process__step:not(:last-child)::before {
+  position: absolute;
+  top: 2rem;
+  bottom: 0;
+  left: calc(1rem - 1px);
+  width: 2px;
+  background-color: var(--p-primary-200);
+  content: '';
+}
+
+.process__number {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background-color: var(--p-primary-color);
+  color: var(--p-primary-contrast-color);
+  font-weight: 600;
+}
+
+.process__body {
+  min-width: 0;
+  flex: 1;
+  padding-top: 0.25rem;
+}
+
+.process__title {
+  font-weight: 600;
+  line-height: 1.5;
+}

@@ -1,0 +1,18 @@
+<aside [class]="'callout callout--' + style().style">
+  <i [class]="style().icon + ' callout__icon'" aria-hidden="true"></i>
+  <div class="min-w-0 flex-1">
+    @if (content().title) {
+      <p class="callout__title">{{ content().title }}</p>
+    }
+    @if (!blank()) {
+      <app-rich-text [html]="content().html" [editMode]="editMode()" />
+    } @else if (editMode()) {
+      <p class="text-[var(--p-surface-400)] italic">
+        {{ 'BUILDER.WIDGETS.CALLOUT.PLACEHOLDER' | translate }}
+      </p>
+    }
+    @if (content().source) {
+      <p class="callout__source">— {{ content().source }}</p>
+    }
+  </div>
+</aside>

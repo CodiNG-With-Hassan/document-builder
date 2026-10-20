@@ -1,0 +1,80 @@
+<div class="mx-auto flex h-full max-w-4xl flex-col gap-6 overflow-auto p-6">
+  <div class="flex items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-semibold">{{ 'DOCUMENTS.LIST.TITLE' | translate }}</h1>
+      <p class="text-sm text-[var(--p-surface-500)]">{{ 'DOCUMENTS.LIST.SUBTITLE' | translate }}</p>
+    </div>
+    @if (documents().length) {
+      <p-button
+        icon="pi pi-plus"
+        [label]="'DOCUMENTS.LIST.NEW' | translate"
+        (onClick)="openCreateDialog()"
+      />
+    }
+  </div>
+
+  @if (documents().length) {
+    <p-table [value]="documents()" dataKey="id" [rowHover]="true">
+      <ng-template #header>
+        <tr>
+          <th scope="col">{{ 'DOCUMENTS.LIST.COLUMN_TITLE' | translate }}</th>
+          <th scope="col" class="w-56">{{ 'DOCUMENTS.LIST.COLUMN_UPDATED' | translate }}</th>
+          <th scope="col" class="w-16">
+            <span class="sr-only">{{ 'DOCUMENTS.LIST.COLUMN_ACTIONS' | translate }}</span>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-document>
+        <tr
+          class="cursor-pointer"
+          tabindex="0"
+          (click)="open(document)"
+          (keydown.enter)="open(document)"
+        >
+          <td class="font-medium">{{ document.title }}</td>
+          <td class="text-sm text-[var(--p-surface-500)]">
+            {{ document.updatedAt | date: 'medium' }}
+          </td>
+          <td class="text-right">
+            <p-button
+              icon="pi pi-ellipsis-v"
+              severity="secondary"
+              [text]="true"
+              [rounded]="true"
+              [ariaLabel]="'DOCUMENTS.LIST.ROW_ACTIONS' | translate: { title: document.title }"
+              (click)="openRowMenu($event, rowMenu, document)"
+              (keydown.enter)="$event.stopPropagation()"
+            />
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  } @else {
+    <div
+      class="flex flex-col items-center gap-4 rounded-xl border border-dashed border-[var(--p-surface-300)] p-12 text-center"
+    >
+      <i class="pi pi-file text-4xl text-[var(--p-surface-400)]" aria-hidden="true"></i>
+      <div>
+        <p class="font-medium">{{ 'DOCUMENTS.LIST.EMPTY_TITLE' | translate }}</p>
+        <p class="text-sm text-[var(--p-surface-500)]">
+          {{ 'DOCUMENTS.LIST.EMPTY_TEXT' | translate }}
+        </p>
+      </div>
+      <p-button
+        icon="pi pi-plus"
+        [label]="'DOCUMENTS.LIST.NEW' | translate"
+        (onClick)="openCreateDialog()"
+      />
+    </div>
+  }
+</div>
+
+<p-menu #rowMenu [model]="rowMenuItems()" [popup]="true" appendTo="body" />
+
+<app-document-title-dialog
+  [(visible)]="dialogVisible"
+  [mode]="dialogMode()"
+  [initialTitle]="dialogInitialTitle()"
+  [submitTitle]="dialogSubmit()"
+  (saved)="load()"
+/>

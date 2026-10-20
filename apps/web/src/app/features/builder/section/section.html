@@ -1,0 +1,118 @@
+<section
+  class="rounded-xl"
+  [class]="store.editMode() ? 'bg-[var(--p-surface-100)] p-3' : ''"
+  [attr.aria-label]="section().title || ('BUILDER.SECTION.UNTITLED' | translate)"
+>
+  @if (showHeader()) {
+    <div class="mb-2 flex min-h-10 items-center gap-1">
+      @if (store.editMode()) {
+        <span
+          cdkDragHandle
+          class="flex h-7 w-6 cursor-grab items-center justify-center rounded-md text-[var(--p-surface-400)] hover:bg-[var(--p-surface-200)] hover:text-[var(--p-surface-700)] active:cursor-grabbing"
+          aria-hidden="true"
+          [pTooltip]="'BUILDER.SECTION.DRAG' | translate"
+          tooltipPosition="top"
+        >
+          <i class="pi pi-grip-vertical"></i>
+        </span>
+        <p-button
+          [icon]="collapsed() ? 'pi pi-chevron-right' : 'pi pi-chevron-down'"
+          severity="secondary"
+          size="small"
+          [text]="true"
+          [rounded]="true"
+          [ariaLabel]="
+            (collapsed() ? 'BUILDER.SECTION.EXPAND' : 'BUILDER.SECTION.COLLAPSE') | translate
+          "
+          [attr.aria-expanded]="!collapsed()"
+          (onClick)="store.toggleSectionCollapsed(section().id)"
+        />
+      }
+
+      <div class="flex min-w-0 flex-1 items-center gap-2">
+        @if (number(); as number) {
+          <span class="text-lg font-semibold text-[var(--p-primary-color)] tabular-nums">{{
+            number
+          }}</span>
+        }
+        @if (editingTitle()) {
+          <input
+            #titleInput
+            pInputText
+            class="w-full text-lg font-semibold"
+            autocomplete="off"
+            [formField]="titleForm.title"
+            [placeholder]="'BUILDER.SECTION.UNTITLED' | translate"
+            [attr.aria-label]="'BUILDER.SECTION.TITLE_LABEL' | translate"
+            (keydown.enter)="commitTitle()"
+            (keydown.escape)="cancelTitleEdit()"
+            (blur)="commitTitle()"
+          />
+        } @else if (store.editMode()) {
+          <button
+            type="button"
+            class="w-full truncate rounded-md px-2 py-1 text-left text-lg font-semibold hover:bg-[var(--p-surface-200)]"
+            [class]="section().title ? '' : 'text-[var(--p-surface-400)] italic'"
+            [attr.aria-label]="'BUILDER.SECTION.RENAME' | translate"
+            (click)="startTitleEdit()"
+          >
+            {{ section().title || ('BUILDER.SECTION.UNTITLED' | translate) }}
+          </button>
+        } @else {
+          <h2 class="truncate px-1 text-xl font-semibold">{{ section().title }}</h2>
+        }
+      </div>
+
+      @if (store.editMode()) {
+        <p-button
+          icon="pi pi-hashtag"
+          size="small"
+          [severity]="section().numbered ? 'primary' : 'secondary'"
+          [text]="true"
+          [rounded]="true"
+          [ariaLabel]="'BUILDER.SECTION.NUMBERED' | translate"
+          [pTooltip]="'BUILDER.SECTION.NUMBERED' | translate"
+          [attr.aria-pressed]="section().numbered"
+          (onClick)="store.toggleSectionNumbered(section().id)"
+        />
+        <p-button
+          icon="pi pi-arrow-up"
+          severity="secondary"
+          size="small"
+          [text]="true"
+          [rounded]="true"
+          [disabled]="isFirst()"
+          [ariaLabel]="'BUILDER.SECTION.MOVE_UP' | translate"
+          [pTooltip]="'BUILDER.SECTION.MOVE_UP' | translate"
+          (onClick)="move(-1)"
+        />
+        <p-button
+          icon="pi pi-arrow-down"
+          severity="secondary"
+          size="small"
+          [text]="true"
+          [rounded]="true"
+          [disabled]="isLast()"
+          [ariaLabel]="'BUILDER.SECTION.MOVE_DOWN' | translate"
+          [pTooltip]="'BUILDER.SECTION.MOVE_DOWN' | translate"
+          (onClick)="move(1)"
+        />
+        <p-button
+          icon="pi pi-trash"
+          severity="danger"
+          size="small"
+          [text]="true"
+          [rounded]="true"
+          [disabled]="!store.canDeleteSection()"
+          [ariaLabel]="'BUILDER.SECTION.DELETE' | translate"
+          [pTooltip]="'BUILDER.SECTION.DELETE' | translate"
+          (onClick)="confirmDelete()"
+        />
+      }
+    </div>
+  }
+
+  @if (!collapsed()) {
+    <app-section-grid [section]="section()" />
+  }
+</section>

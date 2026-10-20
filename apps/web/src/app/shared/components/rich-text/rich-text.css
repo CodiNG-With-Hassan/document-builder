@@ -1,0 +1,29 @@
+.app-rich-text {
+  display: block;
+}
+
+.app-rich-text p {
+  margin: 0;
+  line-height: 1.625;
+  overflow-wrap: break-word;
+}
+
+.app-rich-text a {
+  color: var(--p-primary-color);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* A Link without a URL: plain text for readers, flagged while editing. */
+.app-rich-text a[href=''],
+.app-rich-text a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+  cursor: text;
+}
+
+.app-rich-text.rich-text--edit a[href=''],
+.app-rich-text.rich-text--edit a:not([href]) {
+  color: var(--p-orange-600);
+  text-decoration: underline dashed;
+}

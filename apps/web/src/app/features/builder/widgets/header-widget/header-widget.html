@@ -1,0 +1,37 @@
+<div
+  class="heading"
+  [class]="'heading--h' + level()"
+  role="heading"
+  [attr.aria-level]="level() + 1"
+>
+  @if (outline()?.number; as number) {
+    <span class="heading__number">{{ number }}</span>
+  }
+  <!-- Text is written by an effect, not bound, so typing never resets the caret. -->
+  <span
+    #textElement
+    class="heading__text"
+    [class.heading__text--editable]="editMode()"
+    [attr.contenteditable]="editMode() ? 'plaintext-only' : null"
+    [attr.role]="editMode() ? 'textbox' : null"
+    [attr.tabindex]="editMode() ? 0 : null"
+    [attr.aria-label]="editMode() ? ('BUILDER.WIDGETS.HEADER.FIELD_LABEL' | translate) : null"
+    [attr.data-placeholder]="editMode() ? ('BUILDER.WIDGETS.HEADER.PLACEHOLDER' | translate) : null"
+    [attr.spellcheck]="editMode() ? 'true' : null"
+    (focus)="onFocus()"
+    (input)="onInput()"
+    (keydown)="onKeydown($event)"
+    (blur)="onBlur()"
+  ></span>
+  @if (editMode() && outline()?.skippedLevel) {
+    <i
+      class="pi pi-exclamation-triangle heading__warning"
+      [attr.aria-label]="
+        'BUILDER.WIDGETS.HEADER.SKIPPED_LEVEL' | translate: { level: level(), parent: level() - 1 }
+      "
+      [pTooltip]="
+        'BUILDER.WIDGETS.HEADER.SKIPPED_LEVEL' | translate: { level: level(), parent: level() - 1 }
+      "
+    ></i>
+  }
+</div>

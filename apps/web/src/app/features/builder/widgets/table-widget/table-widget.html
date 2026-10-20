@@ -1,0 +1,198 @@
+@if (value().content.caption) {
+  <div class="table__caption">{{ value().content.caption }}</div>
+}
+
+<div class="table__wrapper" [class.table__wrapper--editable]="editable()">
+  <table
+    #table
+    class="table"
+    [class.table--striped]="value().config.striped"
+    [class.table--fixed]="!!widths()"
+  >
+    @if (widths(); as widths) {
+      <colgroup>
+        @if (editable()) {
+          <col class="table__gutter-col" />
+        }
+        @for (width of widths; track $index) {
+          <col [style.width.%]="width" />
+        }
+      </colgroup>
+    }
+
+    @if (editable()) {
+      <tr class="table__column-handles">
+        <td class="table__gutter"></td>
+        @for (column of columns(); track column) {
+          <td class="table__column-handle-cell">
+            <button
+              type="button"
+              class="table__handle"
+              [attr.aria-label]="
+                'BUILDER.WIDGETS.TABLE.COLUMN_ACTIONS' | translate: { column: column + 1 }
+              "
+              [pTooltip]="
+                'BUILDER.WIDGETS.TABLE.COLUMN_ACTIONS' | translate: { column: column + 1 }
+              "
+              (click)="openColumnMenu($event, menu, column)"
+            >
+              <i class="pi pi-ellipsis-h" aria-hidden="true"></i>
+            </button>
+          </td>
+        }
+      </tr>
+    }
+
+    @for (cells of rows(); track $index; let row = $index) {
+      <tr [attr.data-row]="row">
+        @if (editable()) {
+          <td class="table__gutter">
+            <button
+              type="button"
+              class="table__handle"
+              [attr.aria-label]="'BUILDER.WIDGETS.TABLE.ROW_ACTIONS' | translate: { row: row + 1 }"
+              [pTooltip]="'BUILDER.WIDGETS.TABLE.ROW_ACTIONS' | translate: { row: row + 1 }"
+              tooltipPosition="left"
+              (click)="openRowMenu($event, menu, row)"
+            >
+              <i class="pi pi-ellipsis-v" aria-hidden="true"></i>
+            </button>
+          </td>
+        }
+        @for (cell of cells; track $index; let column = $index) {
+          <ng-template #cellContent>
+            @if (isEditing(row, column)) {
+              <div class="table__editor">
+                @if (cell.kind === 'text') {
+                  <input
+                    class="table__input"
+                    autocomplete="off"
+                    [formField]="cellForm.text"
+                    [attr.aria-label]="
+                      'BUILDER.WIDGETS.TABLE.CELL' | translate: { row: row + 1, column: column + 1 }
+                    "
+                    (input)="onCellInput('text', $event)"
+                    (keydown)="onCellKeydown($event, 'text')"
+                  />
+                } @else {
+                  <input
+                    class="table__input"
+                    autocomplete="off"
+                    [formField]="cellForm.label"
+                    [placeholder]="'BUILDER.WIDGETS.TABLE.LINK_LABEL' | translate"
+                    [attr.aria-label]="'BUILDER.WIDGETS.TABLE.LINK_LABEL' | translate"
+                    (input)="onCellInput('label', $event)"
+                    (keydown)="onCellKeydown($event, 'label')"
+                  />
+                  <input
+                    class="table__input table__input--url"
+                    type="url"
+                    autocomplete="off"
+                    [formField]="cellForm.url"
+                    [placeholder]="'BUILDER.WIDGETS.TABLE.LINK_URL' | translate"
+                    [attr.aria-label]="'BUILDER.WIDGETS.TABLE.LINK_URL' | translate"
+                    (input)="onCellInput('url', $event)"
+                    (keydown)="onCellKeydown($event, 'url')"
+                  />
+                }
+                <button
+                  type="button"
+                  class="table__kind-toggle"
+                  [attr.aria-label]="
+                    (cell.kind === 'text'
+                      ? 'BUILDER.WIDGETS.TABLE.MAKE_LINK'
+                      : 'BUILDER.WIDGETS.TABLE.MAKE_TEXT'
+                    ) | translate
+                  "
+                  [pTooltip]="
+                    (cell.kind === 'text'
+                      ? 'BUILDER.WIDGETS.TABLE.MAKE_LINK'
+                      : 'BUILDER.WIDGETS.TABLE.MAKE_TEXT'
+                    ) | translate
+                  "
+                  (mousedown)="$event.preventDefault()"
+                  (click)="toggleKind()"
+                >
+                  <i
+                    [class]="cell.kind === 'text' ? 'pi pi-link' : 'pi pi-align-left'"
+                    aria-hidden="true"
+                  ></i>
+                </button>
+              </div>
+            } @else if (cell.kind === 'text') {
+              {{ cell.text }}
+            } @else if (cell.link.url && !editMode()) {
+              <a [href]="cell.link.url" target="_blank" rel="noopener">{{ cell.link.label }}</a>
+            } @else {
+              <span [class.table__link--edit]="editMode()">{{ cell.link.label }}</span>
+              @if (editMode() && !cell.link.url) {
+                <i
+                  class="pi pi-exclamation-triangle table__link-warning"
+                  [attr.aria-label]="'BUILDER.WIDGETS.LINK.NO_URL' | translate"
+                  [pTooltip]="'BUILDER.WIDGETS.LINK.NO_URL' | translate"
+                ></i>
+              }
+            }
+            @if (editable() && row === 0 && column < columns().length - 1) {
+              <span
+                class="table__resizer"
+                role="separator"
+                aria-orientation="vertical"
+                [attr.aria-label]="'BUILDER.WIDGETS.TABLE.RESIZE' | translate"
+                (pointerdown)="startResize($event, column)"
+              ></span>
+            }
+          </ng-template>
+
+          @if (isHeader(row, column)) {
+            <th
+              [attr.scope]="row === 0 && value().config.headerRow ? 'col' : 'row'"
+              [attr.data-column]="column"
+              [class.is-editing]="isEditing(row, column)"
+              [class.is-editable]="editable()"
+              [attr.tabindex]="editable() && !isEditing(row, column) ? 0 : null"
+              (click)="onCellClick(row, column, $event)"
+              (keydown.enter)="onCellClick(row, column, $event)"
+            >
+              <ng-container [ngTemplateOutlet]="cellContent" />
+            </th>
+          } @else {
+            <td
+              [attr.data-column]="column"
+              [class.is-editing]="isEditing(row, column)"
+              [class.is-editable]="editable()"
+              [attr.tabindex]="editable() && !isEditing(row, column) ? 0 : null"
+              (click)="onCellClick(row, column, $event)"
+              (keydown.enter)="onCellClick(row, column, $event)"
+            >
+              <ng-container [ngTemplateOutlet]="cellContent" />
+            </td>
+          }
+        }
+      </tr>
+    }
+  </table>
+
+  @if (editable()) {
+    <div class="table__edge-actions">
+      <p-button
+        icon="pi pi-plus"
+        size="small"
+        severity="secondary"
+        [text]="true"
+        [label]="'BUILDER.WIDGETS.TABLE.ADD_ROW' | translate"
+        (onClick)="addRow()"
+      />
+      <p-button
+        icon="pi pi-plus"
+        size="small"
+        severity="secondary"
+        [text]="true"
+        [label]="'BUILDER.WIDGETS.TABLE.ADD_COLUMN' | translate"
+        (onClick)="addColumn()"
+      />
+    </div>
+  }
+</div>
+
+<p-menu #menu [model]="menuItems()" [popup]="true" appendTo="body" />

@@ -1,0 +1,23 @@
+<div class="video">
+  @if (embedUrl(); as src) {
+    <iframe
+      class="video__frame"
+      [class.video__frame--edit]="editMode()"
+      [src]="src"
+      [title]="'BUILDER.WIDGETS.VIDEO.LABEL' | translate"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+      allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin"
+    ></iframe>
+  } @else if (editMode()) {
+    <div class="video__empty">
+      <i class="pi pi-video text-2xl" aria-hidden="true"></i>
+      <span>
+        {{
+          (url() ? 'BUILDER.WIDGETS.VIDEO.UNSUPPORTED' : 'BUILDER.WIDGETS.VIDEO.PLACEHOLDER')
+            | translate
+        }}
+      </span>
+    </div>
+  }
+</div>

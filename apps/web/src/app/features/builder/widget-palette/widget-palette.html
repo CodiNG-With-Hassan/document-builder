@@ -1,0 +1,44 @@
+<h2 class="mb-1 text-sm font-semibold tracking-wide text-[var(--p-surface-500)] uppercase">
+  {{ 'BUILDER.PALETTE.TITLE' | translate }}
+</h2>
+<p class="mb-4 text-sm text-[var(--p-surface-500)]">{{ 'BUILDER.PALETTE.HINT' | translate }}</p>
+
+<ul class="flex flex-col gap-2">
+  @for (type of types; track type.type) {
+    <li>
+      @if (store.canAdd(type.type)) {
+        <div
+          #entry
+          class="grid-stack-item"
+          [attr.gs-w]="type.defaultSize.w"
+          [attr.gs-h]="type.defaultSize.h"
+          [attr.data-widget-type]="type.type"
+        >
+          <div
+            class="grid-stack-item-content flex cursor-grab items-center gap-3 rounded-lg border border-[var(--p-surface-200)] bg-[var(--p-surface-0)] px-3 py-2 hover:border-[var(--p-primary-color)]"
+            role="button"
+            tabindex="0"
+            (click)="add(type.type)"
+            (keydown.enter)="add(type.type)"
+            (keydown.space)="$event.preventDefault(); add(type.type)"
+          >
+            <i [class]="type.icon + ' text-[var(--p-primary-color)]'" aria-hidden="true"></i>
+            <span class="font-medium">{{ type.labelKey | translate }}</span>
+          </div>
+        </div>
+      } @else {
+        <div
+          class="flex cursor-not-allowed items-center gap-3 rounded-lg border border-[var(--p-surface-200)] px-3 py-2 opacity-50"
+          role="button"
+          tabindex="0"
+          aria-disabled="true"
+          [pTooltip]="'BUILDER.PALETTE.LIMIT_REACHED' | translate"
+          tooltipPosition="left"
+        >
+          <i [class]="type.icon" aria-hidden="true"></i>
+          <span class="font-medium">{{ type.labelKey | translate }}</span>
+        </div>
+      }
+    </li>
+  }
+</ul>

@@ -1,0 +1,5 @@
+@for (error of errors(); track error.key) {
+  <div class="text-xs leading-4 text-[var(--p-red-500)]">
+    {{ error.key | translate: error.params }}
+  </div>
+}

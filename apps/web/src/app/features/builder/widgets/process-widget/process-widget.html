@@ -1,0 +1,19 @@
+<ol class="process">
+  @for (step of steps(); track step.id; let index = $index) {
+    <li class="process__step">
+      <span class="process__number" aria-hidden="true">{{ index + 1 }}</span>
+      <div class="process__body">
+        @if (step.title) {
+          <p class="process__title">{{ step.title }}</p>
+        } @else if (editMode()) {
+          <p class="process__title text-[var(--p-surface-400)] italic">
+            {{ 'BUILDER.WIDGETS.PROCESS.STEP_PLACEHOLDER' | translate: { number: index + 1 } }}
+          </p>
+        }
+        @if (!step.blank) {
+          <app-rich-text [html]="step.html" [editMode]="editMode()" />
+        }
+      </div>
+    </li>
+  }
+</ol>

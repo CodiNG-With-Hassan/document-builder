@@ -1,0 +1,6 @@
+<app-rich-text-editor
+  [label]="'BUILDER.WIDGETS.TEXT.FIELD_LABEL' | translate"
+  [html]="widget().value.content.html"
+  (htmlChange)="onHtmlChange($event)"
+  (commit)="commit.emit()"
+/>

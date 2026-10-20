@@ -1,0 +1,23 @@
+<aside
+  class="flex h-full flex-col gap-4 p-4"
+  [attr.aria-label]="'BUILDER.SIDEBAR.LABEL' | translate"
+>
+  @if (definition(); as definition) {
+    <div class="flex items-center gap-2">
+      <p-button
+        icon="pi pi-arrow-left"
+        severity="secondary"
+        size="small"
+        [text]="true"
+        [rounded]="true"
+        [ariaLabel]="'BUILDER.SIDEBAR.BACK_TO_PALETTE' | translate"
+        (onClick)="store.selectWidget(null)"
+      />
+      <i [class]="definition.icon + ' text-[var(--p-primary-color)]'" aria-hidden="true"></i>
+      <h2 class="font-semibold">{{ definition.labelKey | translate }}</h2>
+    </div>
+    <ng-container #formHost />
+  } @else {
+    <app-widget-palette />
+  }
+</aside>

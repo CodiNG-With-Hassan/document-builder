@@ -1,0 +1,23 @@
+{
+  "SHARED": {
+    "APP_NAME": "Document Creator",
+    "THEME": {
+      "SWITCH_TO_LIGHT": "Switch to light mode",
+      "SWITCH_TO_DARK": "Switch to dark mode"
+    },
+    "ACTIONS": {
+      "CANCEL": "Cancel",
+      "RENAME": "Rename",
+      "DELETE": "Delete"
+    },
+    "FIELD_ERRORS": {
+      "IS_REQUIRED": "{{label}} is required.",
+      "IS_NOT_VALID": "{{label}} is not valid."
+    },
+    "RICH_TEXT": {
+      "BOLD": "Bold",
+      "ITALIC": "Italic",
+      "LINK": "Link"
+    }
+  }
+}

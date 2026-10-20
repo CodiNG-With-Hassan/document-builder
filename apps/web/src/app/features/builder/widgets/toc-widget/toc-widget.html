@@ -1,0 +1,23 @@
+<nav [attr.aria-label]="title() || ('BUILDER.WIDGETS.TOC.LABEL' | translate)">
+  @if (title()) {
+    <h2 class="mb-2 text-lg font-semibold">{{ title() }}</h2>
+  }
+  @if (entries().length) {
+    <ol class="toc">
+      @for (entry of entries(); track entry.id) {
+        <li [class]="'toc__entry toc__entry--l' + entry.level">
+          <a href="#" class="toc__link" (click)="go(entry, $event)">
+            @if (entry.number) {
+              <span class="toc__number">{{ entry.number }}</span>
+            }
+            <span>{{ entry.text || ('BUILDER.SECTION.UNTITLED' | translate) }}</span>
+          </a>
+        </li>
+      }
+    </ol>
+  } @else if (editMode()) {
+    <p class="text-sm text-[var(--p-surface-400)] italic">
+      {{ 'BUILDER.WIDGETS.TOC.EMPTY' | translate }}
+    </p>
+  }
+</nav>

@@ -1,0 +1,37 @@
+<div>
+  <label for="toc-widget-title" class="mb-1 block text-sm font-medium">
+    {{ 'BUILDER.WIDGETS.TOC.TITLE' | translate }}
+  </label>
+  <input
+    pInputText
+    id="toc-widget-title"
+    class="w-full"
+    autocomplete="off"
+    [formField]="tocForm.title"
+    (input)="onTitleInput($event)"
+    (blur)="commit.emit()"
+  />
+</div>
+
+<div>
+  <span class="mb-1 block text-sm font-medium">{{ 'BUILDER.WIDGETS.TOC.DEPTH' | translate }}</span>
+  <div
+    class="flex flex-col gap-1"
+    role="radiogroup"
+    [attr.aria-label]="'BUILDER.WIDGETS.TOC.DEPTH' | translate"
+  >
+    @for (option of depths; track option.depth) {
+      <p-button
+        size="small"
+        class="w-full"
+        styleClass="w-full justify-start"
+        [label]="option.labelKey | translate"
+        [severity]="widget().value.config.depth === option.depth ? 'primary' : 'secondary'"
+        [outlined]="widget().value.config.depth !== option.depth"
+        role="radio"
+        [attr.aria-checked]="widget().value.config.depth === option.depth"
+        (onClick)="setDepth(option.depth)"
+      />
+    }
+  </div>
+</div>

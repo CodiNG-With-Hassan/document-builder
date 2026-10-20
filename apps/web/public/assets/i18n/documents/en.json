@@ -1,0 +1,27 @@
+{
+  "DOCUMENTS": {
+    "LIST": {
+      "TITLE": "Documents",
+      "SUBTITLE": "Open a document to arrange its sections and widgets.",
+      "NEW": "New document",
+      "COLUMN_TITLE": "Title",
+      "COLUMN_UPDATED": "Last updated",
+      "COLUMN_ACTIONS": "Actions",
+      "ROW_ACTIONS": "Actions for {{title}}",
+      "EMPTY_TITLE": "No documents yet",
+      "EMPTY_TEXT": "Create your first document to start building."
+    },
+    "TITLE_DIALOG": {
+      "CREATE_HEADER": "New document",
+      "RENAME_HEADER": "Rename document",
+      "LABEL": "Title",
+      "PLACEHOLDER": "e.g. Quarterly Update",
+      "CREATE": "Create",
+      "RENAME": "Rename"
+    },
+    "DELETE": {
+      "HEADER": "Delete document",
+      "MESSAGE": "Delete “{{title}}”? This cannot be undone."
+    }
+  }
+}

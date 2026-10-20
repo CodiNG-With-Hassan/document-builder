@@ -1,0 +1,9 @@
+<div #grid class="grid-stack"></div>
+
+@if (store.editMode() && !section().widgets.length) {
+  <div
+    class="pointer-events-none absolute inset-0 flex items-center justify-center rounded-lg border-2 border-dashed border-[var(--p-surface-300)] text-sm text-[var(--p-surface-500)]"
+  >
+    {{ 'BUILDER.SECTION.EMPTY_HINT' | translate }}
+  </div>
+}

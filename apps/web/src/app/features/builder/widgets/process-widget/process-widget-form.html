@@ -1,0 +1,75 @@
+<ol class="flex flex-col gap-3" cdkDropList (cdkDropListDropped)="onDrop($event)">
+  @for (step of steps(); track step.id; let index = $index, first = $first, last = $last) {
+    <li
+      cdkDrag
+      class="flex flex-col gap-2 rounded-lg border border-[var(--p-surface-200)] bg-[var(--p-surface-0)] p-3"
+    >
+      <div class="flex items-center gap-1">
+        <span
+          cdkDragHandle
+          class="flex h-7 w-6 cursor-grab items-center justify-center text-[var(--p-surface-400)]"
+          aria-hidden="true"
+          [pTooltip]="'BUILDER.WIDGETS.PROCESS.DRAG' | translate"
+        >
+          <i class="pi pi-grip-vertical"></i>
+        </span>
+        <span class="flex-1 text-sm font-semibold">
+          {{ 'BUILDER.WIDGETS.PROCESS.STEP' | translate: { number: index + 1 } }}
+        </span>
+        <p-button
+          icon="pi pi-arrow-up"
+          size="small"
+          severity="secondary"
+          [text]="true"
+          [rounded]="true"
+          [disabled]="first"
+          [ariaLabel]="'BUILDER.WIDGETS.PROCESS.MOVE_UP' | translate"
+          (onClick)="moveStep(index, index - 1)"
+        />
+        <p-button
+          icon="pi pi-arrow-down"
+          size="small"
+          severity="secondary"
+          [text]="true"
+          [rounded]="true"
+          [disabled]="last"
+          [ariaLabel]="'BUILDER.WIDGETS.PROCESS.MOVE_DOWN' | translate"
+          (onClick)="moveStep(index, index + 1)"
+        />
+        <p-button
+          icon="pi pi-trash"
+          size="small"
+          severity="danger"
+          [text]="true"
+          [rounded]="true"
+          [disabled]="steps().length <= 1"
+          [ariaLabel]="'BUILDER.WIDGETS.PROCESS.DELETE' | translate"
+          (onClick)="deleteStep(index)"
+        />
+      </div>
+      <input
+        pInputText
+        class="w-full"
+        autocomplete="off"
+        [formField]="processForm.titles[index]"
+        [placeholder]="'BUILDER.WIDGETS.PROCESS.TITLE' | translate"
+        [attr.aria-label]="'BUILDER.WIDGETS.PROCESS.TITLE' | translate"
+        (input)="onTitleInput(index, $event)"
+        (blur)="commit.emit()"
+      />
+      <app-rich-text-editor
+        [label]="'BUILDER.WIDGETS.PROCESS.DESCRIPTION' | translate"
+        [html]="step.html"
+        (htmlChange)="onHtmlChange(index, $event)"
+        (commit)="commit.emit()"
+      />
+    </li>
+  }
+</ol>
+<p-button
+  icon="pi pi-plus"
+  severity="secondary"
+  [outlined]="true"
+  [label]="'BUILDER.WIDGETS.PROCESS.ADD' | translate"
+  (onClick)="addStep()"
+/>

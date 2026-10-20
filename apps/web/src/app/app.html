@@ -1,0 +1,41 @@
+<div class="flex h-screen flex-col">
+  <header
+    class="flex h-14 shrink-0 items-center justify-between border-b border-[var(--p-surface-200)] bg-[var(--p-surface-0)] px-4"
+  >
+    <a
+      routerLink="/documents"
+      class="flex items-center gap-2 font-semibold text-[var(--p-surface-900)]"
+    >
+      <img src="icon.svg" alt="" width="28" height="28" />
+      <span>{{ 'SHARED.APP_NAME' | translate }}</span>
+    </a>
+
+    <p-button
+      [icon]="themeSwitcher.isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"
+      [rounded]="true"
+      [text]="true"
+      severity="secondary"
+      [ariaLabel]="
+        (themeSwitcher.isDarkMode()
+          ? 'SHARED.THEME.SWITCH_TO_LIGHT'
+          : 'SHARED.THEME.SWITCH_TO_DARK'
+        ) | translate
+      "
+      [pTooltip]="
+        (themeSwitcher.isDarkMode()
+          ? 'SHARED.THEME.SWITCH_TO_LIGHT'
+          : 'SHARED.THEME.SWITCH_TO_DARK'
+        ) | translate
+      "
+      tooltipPosition="left"
+      (onClick)="themeSwitcher.toggle()"
+    />
+  </header>
+
+  <main class="min-h-0 flex-1">
+    <router-outlet />
+  </main>
+</div>
+
+<p-toast position="bottom-right" />
+<p-confirm-dialog />

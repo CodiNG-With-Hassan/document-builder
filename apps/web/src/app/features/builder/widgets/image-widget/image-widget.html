@@ -1,0 +1,19 @@
+@if (content().src) {
+  <div class="image__box">
+    @if (opensLink()) {
+      <a class="image__link" [href]="content().href" target="_blank" rel="noopener">
+        <img class="image__img" [src]="content().src" alt="" [style.object-fit]="fit()" />
+      </a>
+    } @else {
+      <img class="image__img" [src]="content().src" alt="" [style.object-fit]="fit()" />
+    }
+  </div>
+} @else if (editMode()) {
+  <div class="image__box image__empty">
+    <i class="pi pi-image text-2xl" aria-hidden="true"></i>
+    <span>{{ 'BUILDER.WIDGETS.IMAGE.PLACEHOLDER' | translate }}</span>
+  </div>
+}
+@if (content().caption) {
+  <p class="image__caption">{{ content().caption }}</p>
+}

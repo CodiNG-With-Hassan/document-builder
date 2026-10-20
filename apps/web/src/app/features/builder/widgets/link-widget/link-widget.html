@@ -1,0 +1,40 @@
+<ng-template #card>
+  <i class="pi pi-link link-card__icon" aria-hidden="true"></i>
+  <div class="min-w-0 flex-1">
+    <p class="link-card__label">
+      @if (content().link.label) {
+        {{ content().link.label }}
+      } @else if (editMode()) {
+        <span class="text-[var(--p-surface-400)] italic">
+          {{ 'BUILDER.WIDGETS.LINK.PLACEHOLDER' | translate }}
+        </span>
+      }
+      @if (editMode() && !content().link.url) {
+        <i
+          class="pi pi-exclamation-triangle link-card__warning"
+          [attr.aria-label]="'BUILDER.WIDGETS.LINK.NO_URL' | translate"
+          [pTooltip]="'BUILDER.WIDGETS.LINK.NO_URL' | translate"
+        ></i>
+      }
+    </p>
+    @if (host()) {
+      <p class="link-card__host">{{ host() }}</p>
+    }
+    @if (content().description) {
+      <p class="link-card__description">{{ content().description }}</p>
+    }
+  </div>
+  @if (opensLink()) {
+    <i class="pi pi-external-link link-card__external" aria-hidden="true"></i>
+  }
+</ng-template>
+
+@if (opensLink()) {
+  <a class="link-card link-card--active" [href]="content().link.url" target="_blank" rel="noopener">
+    <ng-container [ngTemplateOutlet]="card" />
+  </a>
+} @else {
+  <div class="link-card">
+    <ng-container [ngTemplateOutlet]="card" />
+  </div>
+}

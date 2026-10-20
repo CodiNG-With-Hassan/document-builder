@@ -1,0 +1,57 @@
+@if (definition(); as definition) {
+  <div
+    class="frame"
+    [class.frame--edit]="store.editMode()"
+    [class.frame--selected]="selected()"
+    [class.frame--content-sized]="contentSized()"
+    (click)="select()"
+    (keydown.enter)="select()"
+    [attr.tabindex]="store.editMode() ? 0 : null"
+    [attr.role]="store.editMode() ? 'group' : null"
+    [attr.aria-current]="store.editMode() && selected() ? 'true' : null"
+    [attr.aria-label]="store.editMode() ? (definition.labelKey | translate) : null"
+  >
+    <!-- Always rendered (gridstack registers it once per item); hidden outside Edit mode. -->
+    <span
+      class="frame__handle"
+      aria-hidden="true"
+      [pTooltip]="'BUILDER.WIDGET.DRAG' | translate"
+      tooltipPosition="top"
+    >
+      <i class="pi pi-grip-vertical"></i>
+    </span>
+
+    <div class="frame__content">
+      <div #measure class="frame__measure">
+        <ng-container *ngComponentOutlet="definition.view; inputs: viewInputs()" />
+      </div>
+    </div>
+
+    @if (store.editMode()) {
+      <div class="frame__overlay">
+        @if (canDuplicate()) {
+          <p-button
+            icon="pi pi-clone"
+            size="small"
+            severity="secondary"
+            [rounded]="true"
+            [ariaLabel]="'BUILDER.WIDGET.DUPLICATE' | translate"
+            [pTooltip]="'BUILDER.WIDGET.DUPLICATE' | translate"
+            tooltipPosition="top"
+            (onClick)="duplicate()"
+          />
+        }
+        <p-button
+          icon="pi pi-trash"
+          size="small"
+          severity="danger"
+          [rounded]="true"
+          [ariaLabel]="'BUILDER.WIDGET.DELETE' | translate"
+          [pTooltip]="'BUILDER.WIDGET.DELETE' | translate"
+          tooltipPosition="top"
+          (onClick)="confirmDelete()"
+        />
+      </div>
+    }
+  </div>
+}

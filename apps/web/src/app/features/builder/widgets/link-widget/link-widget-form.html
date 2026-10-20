@@ -1,0 +1,44 @@
+@for (item of fields; track item.field) {
+  <div>
+    <label [for]="'link-widget-' + item.field" class="mb-1 block text-sm font-medium">
+      {{ item.labelKey | translate }}
+    </label>
+    @switch (item.field) {
+      @case ('label') {
+        <input
+          pInputText
+          [id]="'link-widget-' + item.field"
+          class="w-full"
+          autocomplete="off"
+          [formField]="linkForm.label"
+          (input)="onFieldInput('label', $event)"
+          (blur)="commit.emit()"
+        />
+      }
+      @case ('url') {
+        <input
+          pInputText
+          [id]="'link-widget-' + item.field"
+          type="url"
+          class="w-full"
+          autocomplete="off"
+          placeholder="https://"
+          [formField]="linkForm.url"
+          (input)="onFieldInput('url', $event)"
+          (blur)="commit.emit()"
+        />
+      }
+      @case ('description') {
+        <input
+          pInputText
+          [id]="'link-widget-' + item.field"
+          class="w-full"
+          autocomplete="off"
+          [formField]="linkForm.description"
+          (input)="onFieldInput('description', $event)"
+          (blur)="commit.emit()"
+        />
+      }
+    }
+  </div>
+}

@@ -1,0 +1,23 @@
+@layer tailwind-base, primeng, gridstack, tailwind-utilities;
+@import 'tailwindcss/theme' layer(tailwind-base);
+@import 'tailwindcss/preflight' layer(tailwind-base);
+@import 'gridstack/dist/gridstack.min.css' layer(gridstack);
+@import 'tailwindcss/utilities' layer(tailwind-utilities);
+@import 'primeicons/primeicons.css';
+
+@custom-variant dark (&:where(.dark-mode, .dark-mode *));
+
+@layer tailwind-base {
+  :root {
+    font-family:
+      'Inter',
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  body {
+    color: var(--p-surface-900);
+    background-color: var(--p-surface-50);
+  }
+}

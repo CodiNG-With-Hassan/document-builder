@@ -1,0 +1,7 @@
+@if (!blank()) {
+  <app-rich-text [html]="html()" [editMode]="editMode()" />
+} @else if (editMode()) {
+  <p class="leading-relaxed text-[var(--p-surface-400)] italic">
+    {{ 'BUILDER.WIDGETS.TEXT.PLACEHOLDER' | translate }}
+  </p>
+}

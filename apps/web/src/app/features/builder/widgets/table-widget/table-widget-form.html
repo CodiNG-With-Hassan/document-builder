@@ -1,0 +1,56 @@
+<p class="text-sm text-[var(--p-surface-500)]">{{ 'BUILDER.WIDGETS.TABLE.HINT' | translate }}</p>
+
+<div>
+  <label for="table-widget-caption" class="mb-1 block text-sm font-medium">
+    {{ 'BUILDER.WIDGETS.TABLE.CAPTION' | translate }}
+  </label>
+  <input
+    pInputText
+    id="table-widget-caption"
+    class="w-full"
+    autocomplete="off"
+    [formField]="tableForm.caption"
+    (input)="onCaptionInput($event)"
+    (blur)="commit.emit()"
+  />
+</div>
+
+@for (toggle of toggles; track toggle.key) {
+  <div class="flex items-center justify-between gap-2">
+    <label [for]="'table-widget-' + toggle.key" class="text-sm font-medium">
+      {{ toggle.labelKey | translate }}
+    </label>
+    @switch (toggle.key) {
+      @case ('headerRow') {
+        <p-toggleswitch
+          [inputId]="'table-widget-' + toggle.key"
+          [formField]="tableForm.headerRow"
+          (onChange)="onToggle('headerRow')"
+        />
+      }
+      @case ('headerColumn') {
+        <p-toggleswitch
+          [inputId]="'table-widget-' + toggle.key"
+          [formField]="tableForm.headerColumn"
+          (onChange)="onToggle('headerColumn')"
+        />
+      }
+      @case ('striped') {
+        <p-toggleswitch
+          [inputId]="'table-widget-' + toggle.key"
+          [formField]="tableForm.striped"
+          (onChange)="onToggle('striped')"
+        />
+      }
+    }
+  </div>
+}
+
+<p-button
+  icon="pi pi-arrows-h"
+  severity="secondary"
+  [outlined]="true"
+  [label]="'BUILDER.WIDGETS.TABLE.RESET_WIDTHS' | translate"
+  [disabled]="!widget().value.config.columnWidths"
+  (onClick)="resetWidths()"
+/>

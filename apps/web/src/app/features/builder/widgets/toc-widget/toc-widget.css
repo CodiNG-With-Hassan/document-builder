@@ -1,0 +1,48 @@
+.toc {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toc__entry {
+  line-height: 1.5;
+}
+
+.toc__entry--l0 {
+  margin-top: 0.375rem;
+  font-weight: 600;
+}
+
+.toc__entry--l1 {
+  padding-left: 1.25rem;
+}
+
+.toc__entry--l2 {
+  padding-left: 2.5rem;
+  font-size: 0.9375rem;
+}
+
+.toc__entry--l3 {
+  padding-left: 3.75rem;
+  font-size: 0.875rem;
+  color: var(--p-surface-600);
+}
+
+.toc__link {
+  display: inline-flex;
+  gap: 0.5rem;
+  border-radius: 0.25rem;
+  color: inherit;
+}
+
+.toc__link:hover,
+.toc__link:focus-visible {
+  color: var(--p-primary-color);
+  text-decoration: underline;
+}
+
+.toc__number {
+  min-width: 2.5rem;
+  color: var(--p-primary-color);
+  font-variant-numeric: tabular-nums;
+}

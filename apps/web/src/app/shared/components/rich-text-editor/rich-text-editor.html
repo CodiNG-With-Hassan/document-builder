@@ -1,0 +1,29 @@
+<span class="mb-1 block text-sm font-medium">{{ label() }}</span>
+<p-editor
+  class="rich-text-editor"
+  [formField]="editorForm.html"
+  [formats]="formats"
+  [style]="{ height: '220px' }"
+  (onTextChange)="onTextChange($event)"
+  (onBlur)="commit.emit()"
+>
+  <ng-template #header>
+    <span class="ql-formats">
+      <button
+        type="button"
+        class="ql-bold"
+        [attr.aria-label]="'SHARED.RICH_TEXT.BOLD' | translate"
+      ></button>
+      <button
+        type="button"
+        class="ql-italic"
+        [attr.aria-label]="'SHARED.RICH_TEXT.ITALIC' | translate"
+      ></button>
+      <button
+        type="button"
+        class="ql-link"
+        [attr.aria-label]="'SHARED.RICH_TEXT.LINK' | translate"
+      ></button>
+    </span>
+  </ng-template>
+</p-editor>

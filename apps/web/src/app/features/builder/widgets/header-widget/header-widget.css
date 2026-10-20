@@ -1,0 +1,52 @@
+.heading {
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: break-word;
+}
+
+.heading--h1 {
+  font-size: 1.5rem;
+}
+
+.heading--h2 {
+  font-size: 1.25rem;
+}
+
+.heading--h3 {
+  font-size: 1.125rem;
+}
+
+.heading__number {
+  margin-right: 0.5rem;
+  color: var(--p-primary-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.heading__warning {
+  margin-left: 0.5rem;
+  color: var(--p-orange-500);
+  font-size: 0.875rem;
+  vertical-align: middle;
+}
+
+.heading__text--editable {
+  display: inline-block;
+  min-width: 1ch;
+  border-radius: 0.25rem;
+  outline: none;
+  cursor: text;
+}
+
+.heading__text--editable:hover {
+  box-shadow: 0 0 0 1px var(--p-primary-200);
+}
+
+.heading__text--editable:focus {
+  box-shadow: 0 0 0 2px var(--p-primary-color);
+}
+
+.heading__text--editable:empty::before {
+  content: attr(data-placeholder);
+  color: var(--p-surface-400);
+  font-style: italic;
+}

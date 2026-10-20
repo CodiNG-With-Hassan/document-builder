@@ -1,0 +1,54 @@
+.callout {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border-radius: 0.5rem;
+  border-left: 4px solid;
+}
+
+.callout--note {
+  border-color: var(--p-primary-color);
+  background-color: var(--p-primary-50);
+}
+
+.callout--quote {
+  border-color: var(--p-surface-400);
+  background-color: var(--p-surface-50);
+  font-style: italic;
+}
+
+.callout--anecdote {
+  border-color: var(--p-amber-500);
+  background-color: var(--p-amber-50);
+}
+
+:host-context(.dark-mode) .callout--note,
+:host-context(.dark-mode) .callout--anecdote {
+  background-color: var(--p-surface-100);
+}
+
+.callout__icon {
+  margin-top: 0.25rem;
+  color: var(--p-surface-500);
+}
+
+.callout--note .callout__icon {
+  color: var(--p-primary-color);
+}
+
+.callout--anecdote .callout__icon {
+  color: var(--p-amber-600);
+}
+
+.callout__title {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.callout__source {
+  margin-top: 0.5rem;
+  color: var(--p-surface-500);
+  font-size: 0.875rem;
+  font-style: normal;
+}

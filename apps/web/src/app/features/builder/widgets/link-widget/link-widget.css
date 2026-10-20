@@ -1,0 +1,43 @@
+.link-card {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--p-surface-200);
+  border-radius: 0.5rem;
+  color: inherit;
+}
+
+.link-card--active:hover {
+  border-color: var(--p-primary-color);
+}
+
+.link-card__icon {
+  margin-top: 0.25rem;
+  color: var(--p-primary-color);
+}
+
+.link-card__label {
+  font-weight: 600;
+  overflow-wrap: break-word;
+}
+
+.link-card__host {
+  color: var(--p-surface-500);
+  font-size: 0.8125rem;
+}
+
+.link-card__description {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.link-card__warning {
+  margin-left: 0.375rem;
+  color: var(--p-orange-500);
+  font-size: 0.75rem;
+}
+
+.link-card__external {
+  color: var(--p-surface-400);
+  font-size: 0.75rem;
+}

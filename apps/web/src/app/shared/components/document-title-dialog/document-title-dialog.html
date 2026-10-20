@@ -1,0 +1,57 @@
+<p-dialog
+  [visible]="visible()"
+  (visibleChange)="visible.set($event)"
+  [header]="
+    (mode() === 'create'
+      ? 'DOCUMENTS.TITLE_DIALOG.CREATE_HEADER'
+      : 'DOCUMENTS.TITLE_DIALOG.RENAME_HEADER'
+    ) | translate
+  "
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '28rem' }"
+  (onShow)="reset()"
+>
+  <form class="flex flex-col gap-1" novalidate (submit)="onSubmit($event)">
+    <label for="document-title" class="text-sm font-medium">
+      {{ 'DOCUMENTS.TITLE_DIALOG.LABEL' | translate }}
+    </label>
+    <input
+      pInputText
+      id="document-title"
+      class="w-full"
+      autocomplete="off"
+      [formField]="titleForm.title"
+      [placeholder]="'DOCUMENTS.TITLE_DIALOG.PLACEHOLDER' | translate"
+      (input)="serverError.set(null)"
+    />
+    <app-signal-field-errors
+      [label]="'DOCUMENTS.TITLE_DIALOG.LABEL' | translate"
+      [field]="titleForm.title"
+    />
+    @if (serverError(); as code) {
+      <div class="text-xs leading-4 text-[var(--p-red-500)]" role="alert">
+        {{ code | errorKey | translate }}
+      </div>
+    }
+
+    <div class="mt-4 flex justify-end gap-2">
+      <p-button
+        type="button"
+        severity="secondary"
+        [text]="true"
+        [label]="'SHARED.ACTIONS.CANCEL' | translate"
+        (onClick)="visible.set(false)"
+      />
+      <p-button
+        type="submit"
+        [label]="
+          (mode() === 'create' ? 'DOCUMENTS.TITLE_DIALOG.CREATE' : 'DOCUMENTS.TITLE_DIALOG.RENAME')
+            | translate
+        "
+      />
+    </div>
+  </form>
+</p-dialog>
